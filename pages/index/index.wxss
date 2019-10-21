@@ -1,0 +1,73 @@
+/* pages/douyin/douyin.wxss */
+page,.container{
+  width: 100vw;
+  height: 100vh;
+}
+/* 阻止页面滑动 */
+page{
+  position: fixed;
+}
+.header{
+  position: absolute;
+  z-index: 999;
+  width: 100%;
+}
+.header image{
+  width: 60rpx;
+  height: 60rpx;
+  position: absolute;
+  left: 50%;
+  margin-left:-30rpx;
+}
+.video{
+  width:100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.animationImg{
+  width: 100vw;
+  height: 100vh;
+  display: block;
+}
+.doubleHeart{
+  width: 128rpx;
+  height: 128rpx;
+  opacity: 0;
+}
+.switchContainer{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.switchContainer .playBtn{
+  width: 80rpx;
+  height: 80rpx;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -40rpx;
+  margin-left: -40rpx;
+}
+.switchContainer .iconBox{
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  right: 30rpx;
+  bottom: 60rpx;
+}
+.switchContainer .iconBox image{
+  width: 65rpx;
+  height: 65rpx;
+  margin-bottom: 60rpx;
+}
+.show{
+  opacity: 1 !important;
+}
+.hide{
+  opacity:0 !important;
+}
+
