@@ -257,16 +257,18 @@ Page({
         this.data.lastTapTimeOutFunc = setTimeout(() => {
           console.log('tap')
           console.log('videoContext', videoContext);
-          if (this.data.isplay) {
-            videoContext.pause();
-            this.setData({
-              isplay: false
-            })
-          } else {
-            videoContext.play();
-            this.setData({
-              isplay: true
-            })
+          if(this.data.videos[this.data.indexPage].imgType){
+            if (this.data.isplay) {
+              videoContext.pause();
+              this.setData({
+                isplay: false
+              })
+            } else {
+              videoContext.play();
+              this.setData({
+                isplay: true
+              })
+            }
           }
         }, 300)
       }
