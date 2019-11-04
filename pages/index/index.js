@@ -3,21 +3,35 @@ const windowHeight = wx.getSystemInfoSync().windowHeight;
 const windowWidth = wx.getSystemInfoSync().windowWidth;
 const app = getApp();
 var globalData = app.globalData;
+var videoContext = '';
 Page({
   /**
    * 页面的初始数据
    */
   data: {
     videos: [{
-      videoUrl: "https://aweme.snssdk.com/aweme/v1/playwm/?video_id=v0200fce0000bg36q72j2boojh1t030g&line=0",
-      type: false,
-      poster: "https://p99.pstatp.com/large/12c5c0009891b32e947b7.jpg"
-    },
-    {
-      videoUrl: "https://aweme.snssdk.com/aweme/v1/playwm/?video_id=v0300fd10000bfrb9mlpimm72a92fsj0&line=0",
-      type: false,
-      poster: "https://p99.pstatp.com/large/12246000525d4c87900e7.jpg"
-    }
+        videoUrl: "https://aweme.snssdk.com/aweme/v1/playwm/?video_id=v0200fce0000bg36q72j2boojh1t030g&line=0",
+        type: false,
+        poster: "https://p99.pstatp.com/large/12c5c0009891b32e947b7.jpg",
+        imgType: true,
+      },
+      {
+        videoUrl: "https://aweme.snssdk.com/aweme/v1/playwm/?video_id=v0300fd10000bfrb9mlpimm72a92fsj0&line=0",
+        type: false,
+        poster: "https://p99.pstatp.com/large/12246000525d4c87900e7.jpg",
+        imgType: true,
+      },
+      {
+        type: false,
+        poster: 'https://img.weixin-qq.com.cn/media/smy1008/09b72ae17ae729f78ccc394079a35a7a.jpg',
+        imgType: false,
+      },
+      {
+        videoUrl: "https://aweme.snssdk.com/aweme/v1/playwm/?video_id=v0300fd10000bfrb9mlpimm72a92fsj0&line=0",
+        type: false,
+        poster: "https://p99.pstatp.com/large/12246000525d4c87900e7.jpg",
+        imgType: true,
+      },
     ],
     phonetop: 0,
     topHeight: 0,
@@ -30,7 +44,7 @@ Page({
     top: 0,
     animation: {}, //滑动动画实例
     animationLove: {}, //单击爱心动画实例
-    doubleClickAnimation: {},//双击屏幕点赞动画实例
+    doubleClickAnimation: {}, //双击屏幕点赞动画实例
     opacity: 0,
     videoContext: {}, //视频的实例
     startTime: 0, //触摸开始的时间
@@ -42,14 +56,18 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function(options) {
     // 查询节点信息对象 exec():执行所有的请求，请求结果按照次序构成数组，在callback的第一个参数中返回
-    wx.createSelectorQuery().select('.video').context(res => {
-      console.log('res', res);
-      this.setData({
-        videoContext: res.context
-      })
-    }).exec()
+    // wx.createSelectorQuery().select('.video').context(res => {
+    //   console.log('res', res);
+    //   videoContext = res.context;
+    //   // this.setData({
+    //   //   videoContext: res.context
+    //   // })
+    // }).exec()
+    if(this.data.videos[0].imgType){
+      videoContext = wx.createVideoContext('video', this);
+    }
     // 初始化动画，创建一个动画animation对象
     this.animationInit();
 
@@ -157,13 +175,27 @@ Page({
       videoShow: true,
       isplay: true
     })
-    setTimeout(() => {
-      //[?]为什么把videoContext放下面就有用   进行数据通信 this.setData页面会重新渲染，所以视频会暂停
-      this.setData({
-        videoShow: false,
-      })
-      this.data.videoContext.play();
-    }, 1100)
+    if(videoContext != ''){
+      videoContext = null;
+    }
+    if(this.data.videos[this.data.indexPage].imgType){
+      videoContext = wx.createVideoContext('video', this);
+      setTimeout(() => {
+        this.setData({
+          videoShow: false,
+        })
+        videoContext.play();
+        console.log('111');
+      }, 1100)
+    }else{
+      setTimeout(() => {
+        this.setData({
+          videoShow: false,
+        })
+        console.log('222');
+      }, 1100)
+    }
+    
 
   },
 
@@ -177,7 +209,6 @@ Page({
       this.setData({
         videos,
         animationLove: this.animationLove.export(),
-        // opacity: 0
       });
     } else {
       console.log('选中')
@@ -187,7 +218,6 @@ Page({
       this.setData({
         videos,
         animationLove: this.animationLove.export(),
-        // opacity: 1
       });
     }
     console.log('tap vidoes', this.data.videos);
@@ -226,7 +256,6 @@ Page({
         // 单击事件延时300毫秒执行，这和最初的浏览器的点击300ms延时有点像。
         this.data.lastTapTimeOutFunc = setTimeout(() => {
           console.log('tap')
-          var videoContext = this.data.videoContext;
           console.log('videoContext', videoContext);
           if (this.data.isplay) {
             videoContext.pause();
